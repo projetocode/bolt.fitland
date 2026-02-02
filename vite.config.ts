@@ -5,18 +5,31 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { optimizeCssModules } from 'vite-plugin-optimize-css-modules';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import * as dotenv from 'dotenv';
+
 // Load environment variables from multiple files
 dotenv.config({ path: '.env.local' });
 dotenv.config({ path: '.env' });
 dotenv.config();
+
 export default defineConfig((config) => {
   return {
     server: {
       host: '0.0.0.0',
+      port: 5173,
+      strictPort: true,
+      hmr: {
+        clientPort: 443,
+        protocol: 'wss',
+      },
       allowedHosts: [
         '.railway.app',
         'localhost',
       ],
+    },
+    preview: {
+      host: '0.0.0.0',
+      port: 5173,
+      strictPort: true,
     },
     define: {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
@@ -88,6 +101,7 @@ export default defineConfig((config) => {
     },
   };
 });
+
 function chrome129IssuePlugin() {
   return {
     name: 'chrome129IssuePlugin',
